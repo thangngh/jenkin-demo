@@ -40,7 +40,7 @@ pipeline {
 
                   withCredentials([usernamePassword(credentialsId: 'GITHUB_CRED', usernameVariable: 'GIT_USER', passwordVariable: 'GIT_TOKEN')]) {
                       // Fetch target branch để kiểm tra conflicts
-                      sh "git fetch https://${GIT_USER}:${GIT_TOKEN}@github.com/your-org-or-user/your-repo.git ${targetBranch}:${targetBranch}"
+                      sh "git fetch https://${GIT_USER}:${GIT_TOKEN}@github.com/thangngh/jenkin-demo.git ${targetBranch}:${targetBranch}"
 
                       // Kiểm tra xem có conflict không
                       def mergeStatus = sh(
