@@ -10,7 +10,7 @@ pipeline {
     }
     
     triggers {
-        githubPullRequest(
+        githubPullRequests(
             cron: '* * * * *',
             triggerPhrase: '.*test\\s+this\\s+please.*',
             onlyTriggerPhrase: false,
@@ -27,15 +27,16 @@ pipeline {
         string(name: 'PR_NUMBER', defaultValue: '', description: 'Số pull request (Tự động khi dùng GitHub PR plugin)')
     }
     
-    environment {
-        GITHUB_REPO = env.ghprbGhRepository ?: 'thangngh/jenkin-demo'
-        PR_NUMBER = env.ghprbPullId ?: params.PR_NUMBER
-    }
-    
     stages {
         stage('Checkout') {
+            environment {
+                GITHUB_REPO = "${env.ghprbGhRepository ?: 'thangngh/jenkin-demo'}"
+                PR_NUMBER = "${env.ghprbPullId ?: params.PR_NUMBER}"
+            }
             steps {
                 checkout scm
+                echo "Working with repository: ${GITHUB_REPO}"
+                echo "Pull Request Number: ${PR_NUMBER}"
             }
         }
         
