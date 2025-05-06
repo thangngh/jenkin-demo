@@ -8,6 +8,7 @@ pipeline {
         // }
         checkout scm
         echo 'Cloned private repo...'
+        echo 'Current directory: '
       }
     }
 
