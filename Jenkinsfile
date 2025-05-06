@@ -34,29 +34,32 @@ pipeline {
         }
         
         stage('Check Conflicts') {
-            steps {
-                script {
-                    def targetBranch = env.CHANGE_TARGET ?: "main" 
-                    
-                    // Fetch target branch để kiểm tra conflicts
-                    sh "git fetch origin ${targetBranch}:${targetBranch}"
-                    
-                    // Kiểm tra xem có conflict không
-                    def mergeStatus = sh(
-                        script: "git merge-tree \$(git merge-base HEAD ${targetBranch}) HEAD ${targetBranch}",
-                        returnStdout: true
-                    )
-                    
-                    if (mergeStatus.contains('<<<<<<< ')) {
-                        echo "⚠️ Conflicts detected in pull request!"
-                        currentBuild.result = 'UNSTABLE'
-                        error "Conflicts detected in pull request. Please resolve before merging."
-                    } else {
-                        echo "✅ No conflicts detected."
-                    }
-                }
-            }
-        }
+          steps {
+              script {
+                  def targetBranch = env.CHANGE_TARGET ?: "main"
+
+                  withCredentials([usernamePassword(credentialsId: 'GITHUB_CRED', usernameVariable: 'GIT_USER', passwordVariable: 'GIT_TOKEN')]) {
+                      // Fetch target branch để kiểm tra conflicts
+                      sh "git fetch https://${GIT_USER}:${GIT_TOKEN}@github.com/your-org-or-user/your-repo.git ${targetBranch}:${targetBranch}"
+
+                      // Kiểm tra xem có conflict không
+                      def mergeStatus = sh(
+                          script: "git merge-tree \$(git merge-base HEAD ${targetBranch}) HEAD ${targetBranch}",
+                          returnStdout: true
+                      )
+
+                      if (mergeStatus.contains('<<<<<<< ')) {
+                          echo "⚠️ Conflicts detected in pull request!"
+                          currentBuild.result = 'UNSTABLE'
+                          error "Conflicts detected in pull request. Please resolve before merging."
+                      } else {
+                          echo "✅ No conflicts detected."
+                      }
+                  }
+              }
+          }
+      } 
+
     }
     
     post {
