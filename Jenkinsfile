@@ -18,6 +18,14 @@ pipeline {
     }
     
     stages {
+        stage('Start') {
+            steps {
+                script {
+                    updateGitHubCommitStatus('PENDING', 'Jenkins is validating the pull request...')
+                }
+            }
+        }
+        
         stage('Checkout') {
             steps {
                 script {
