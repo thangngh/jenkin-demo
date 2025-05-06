@@ -9,8 +9,7 @@ pipeline {
     
     // Sử dụng cú pháp generic trigger để đơn giản hóa
     triggers {
-        // Đặt lịch chạy mỗi giờ (thay vì mỗi phút như trước)
-        pollSCM('H */1 * * *')
+        pollSCM('* * * * *')
     }
     
     parameters {
@@ -58,8 +57,31 @@ pipeline {
                   }
               }
           }
-      } 
+        }
+    }
 
+    stages ('Deploy') {
+        stage('Deploy to Staging') {
+          when {
+              branch 'main' 
+          }
+          steps {
+              script {
+                  echo "Deploying to staging environment..."
+              }
+          }
+        }
+        
+        stage('Deploy to Production') {
+          when {
+              branch 'main' 
+          }
+          steps {
+              script {
+                  echo "Deploying to production environment..."
+              }
+          }
+        }
     }
     
     post {
