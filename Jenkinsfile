@@ -9,18 +9,10 @@ pipeline {
         disableConcurrentBuilds()
     }
     
+    // Sử dụng cú pháp generic trigger để đơn giản hóa
     triggers {
-        githubPullRequests(
-            cron: '* * * * *',
-            triggerPhrase: '.*test\\s+this\\s+please.*',
-            onlyTriggerPhrase: false,
-            useGitHubHooks: true,
-            permitAll: true,
-            autoCloseFailedPullRequests: false,
-            statusUrl: '',
-            statusContext: 'Jenkins PR Validation',
-            cancelQueued: true
-        )
+        // Đặt lịch chạy mỗi giờ (thay vì mỗi phút như trước)
+        pollSCM('H */1 * * *')
     }
     
     parameters {
@@ -29,21 +21,24 @@ pipeline {
     
     stages {
         stage('Checkout') {
-            environment {
-                GITHUB_REPO = "${env.ghprbGhRepository ?: 'thangngh/jenkin-demo'}"
-                PR_NUMBER = "${env.ghprbPullId ?: params.PR_NUMBER}"
-            }
             steps {
-                checkout scm
-                echo "Working with repository: ${GITHUB_REPO}"
-                echo "Pull Request Number: ${PR_NUMBER}"
+                script {
+                    // Định nghĩa các biến môi trường trong script block
+                    env.GITHUB_REPO = env.CHANGE_URL ? env.CHANGE_URL.split('/')[4] + '/' + env.CHANGE_URL.split('/')[5].replace('.git', '') : 'thangngh/jenkin-demo'
+                    env.PR_NUMBER = env.CHANGE_ID ?: params.PR_NUMBER
+                    
+                    echo "Working with repository: ${env.GITHUB_REPO}"
+                    echo "Pull Request Number: ${env.PR_NUMBER}"
+                    
+                    checkout scm
+                }
             }
         }
         
         stage('Check Conflicts') {
             steps {
                 script {
-                    def targetBranch = env.ghprbTargetBranch ?: "main" // Lấy nhánh đích từ PR hoặc dùng main
+                    def targetBranch = env.CHANGE_TARGET ?: "main" 
                     
                     // Fetch target branch để kiểm tra conflicts
                     sh "git fetch origin ${targetBranch}:${targetBranch}"
