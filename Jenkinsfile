@@ -7,7 +7,8 @@ pipeline {
         //   sh 'git clone https://$GIT_USER:$GIT_TOKEN@github.com/thangngh/jenkin-demo.git'
         // }
         checkout scm
-        echo 'Cloned private repository...'
+        echo 'Cloned private repo...'
+        echo 'Current directory: '
       }
     }
 
