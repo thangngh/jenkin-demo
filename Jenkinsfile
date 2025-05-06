@@ -58,9 +58,7 @@ pipeline {
               }
           }
         }
-    }
 
-    stages ('Deploy') {
         stage('Deploy to Staging') {
           when {
               branch 'main' 
