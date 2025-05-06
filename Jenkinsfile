@@ -66,7 +66,7 @@ pipeline {
           }
           steps {
               script {
-                  echo "Deploying to production environment..."
+                  echo "Deploying to production [branch: dev-234] environment..."
               }
           }
         }
