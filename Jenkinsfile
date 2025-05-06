@@ -76,8 +76,8 @@ pipeline {
             updateGitHubCommitStatus('FAILURE', 'Build failed')
         }
         always {
-            cleanWs()
-        }
+        cleanWs(deleteDirs: true, disableDeferredWipeout: true)
+      } 
     }
 }
 
