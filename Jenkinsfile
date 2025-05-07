@@ -110,6 +110,8 @@ pipeline {
                             sh 'git config --global user.name "thangngh"'
 
                             dir(repoDir) {
+                                    sh "git fetch ${repoUrl} ${mainBranch}"
+                                    sh "echo fetching... "
                                     sh "git pull  ${repoUrl} ${mainBranch}"
                             }
                         }
