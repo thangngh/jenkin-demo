@@ -84,8 +84,26 @@ pipeline {
             sshagent(credentials:['df464007-da47-414c-907d-7c46364d9075']) {
                 // sh 'ssh -o StrictHostKeyChecking=no -l root 172.17.100.19 "echo Hello World"'
                 sh 'echo "Hello World"'
+
+                stages ('SSH') {
+                    stage('SSH') {
+                        steps {
+                            script {
+                                echo "SSH to remote server..."
+                            }
+                        }
+                    }
+                }
+                                
             }
         }
+
+        // steps {
+        //     withCredentials([usernamePassword(credentialsId: 'GITHUB_CRED', usernameVariable: 'GIT_USER', passwordVariable: 'GIT_TOKEN')]) {
+        //         // sh 'git clone https://$GIT_USER:$GIT_TOKEN@github.com/thangngh/jenkin-demo.git'
+        //         sh 'echo "do git clone"'
+        //     }
+        // }
       }
 
     }
