@@ -7,9 +7,7 @@ pipeline {
         disableConcurrentBuilds()
     }
     
-    // Sử dụng cú pháp generic trigger để đơn giản hóa
     triggers {
-        // Đặt lịch chạy mỗi giờ (thay vì mỗi phút như trước)
         // pollSCM('H */1 * * *')
         githubPush()
     }
@@ -30,7 +28,6 @@ pipeline {
         stage('Checkout') {
             steps {
                 script {
-                    // Định nghĩa các biến môi trường trong script block
                     env.GITHUB_REPO = env.CHANGE_URL ? env.CHANGE_URL.split('/')[4] + '/' + env.CHANGE_URL.split('/')[5].replace('.git', '') : 'thangngh/jenkin-demo'
                     env.PR_NUMBER = env.CHANGE_ID ?: params.PR_NUMBER
                     
@@ -100,7 +97,7 @@ pipeline {
                             sh 'git config --global user.name "thangngh"'
 
                             dir(repoDir) {
-                                    sh "git pull --no-rebase ${repoUrl} ${mainBranch}"
+                                    sh "git pull  ${repoUrl} ${mainBranch}"
                             }
                         }
                     }
