@@ -120,6 +120,8 @@ pipeline {
                                 cd ${repoDir} && git pull origin ${mainBranch}
                             else
                                 git clone ${repoUrl}
+
+                                echo 'Cloned repository successfully!'
                             fi
                         """
                     }
