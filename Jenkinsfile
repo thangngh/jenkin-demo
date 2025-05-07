@@ -83,7 +83,16 @@ pipeline {
         }
         steps {
 
-            checkout scm
+            checkout([
+                $class: 'GitSCM',
+                branches: [[name: '*/main']],
+                userRemoteConfigs: [[
+                    url: "https://github.com/thangngh/jenkin-demo.git",
+                    credentialsId: 'GITHUB_CRED'
+                ]],
+                doGenerateSubmoduleConfigurations: false,
+                extensions: [[$class: 'CleanBeforeCheckout']] // Xóa workspace trước khi checkout
+            ])
             echo "SSH agent is running... checking: 1"
             
             withCredentials([usernamePassword(credentialsId: 'GITHUB_CRED', usernameVariable: 'GIT_USER', passwordVariable: 'GIT_TOKEN')]) {
