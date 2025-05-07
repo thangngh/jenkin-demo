@@ -90,8 +90,9 @@ pipeline {
                     url: "https://github.com/thangngh/jenkin-demo.git",
                     credentialsId: 'GITHUB_CRED'
                 ]],
-                doGenerateSubmoduleConfigurations: false,
-                extensions: [[$class: 'CleanBeforeCheckout']] // Xóa workspace trước khi checkout
+                extensions: [
+                    [$class: 'CleanBeforeCheckout']
+                ]
             ])
             echo "SSH agent is running... checking: 1"
             
@@ -103,11 +104,14 @@ pipeline {
 
                     sh 'echo "SSH agent is running... checking: 2"'
 
+                    sh 'git config --global user.email "thangngh@gmail.com"'
+                    sh 'git config --global user.name "thangngh"'
+
                     sshagent(credentials: ['df464007-da47-414c-907d-7c46364d9075']) {
                         script {
-
-                            sh 'git config --global user.email "thangngh@gmail.com"'
-                            sh 'git config --global user.name "thangngh"'
+                            sh 'git branch'
+                            sh 'git status'
+                            sh 'git rev-parse --abbrev-ref HEAD'
 
                             dir(repoDir) {
                                     sh "git fetch ${repoUrl} ${mainBranch}"
