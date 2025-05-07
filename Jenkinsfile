@@ -110,7 +110,7 @@ pipeline {
             // }
             withCredentials([usernamePassword(credentialsId: 'GITHUB_CRED', usernameVariable: 'GIT_USER', passwordVariable: 'GIT_TOKEN')]) {
                 script {
-                    def repoUrl = "https://${GIT_USER}:${GIT_TOKEN}@github.com/name/jenkin-demo.git"
+                    def repoUrl = "https://${GIT_USER}:${GIT_TOKEN}@github.com/thangngh/jenkin-demo.git"
                     def repoDir = "jenkin-demo"
                     def mainBranch = "main"
 
