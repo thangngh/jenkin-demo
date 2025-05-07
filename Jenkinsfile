@@ -94,14 +94,13 @@ pipeline {
                 // }
                                 
             }
-        }
 
-        steps {
-            withCredentials([usernamePassword(credentialsId: 'GITHUB_CRED', usernameVariable: 'GIT_USER', passwordVariable: 'GIT_TOKEN')]) {
+             withCredentials([usernamePassword(credentialsId: 'GITHUB_CRED', usernameVariable: 'GIT_USER', passwordVariable: 'GIT_TOKEN')]) {
                 // sh 'git clone https://$GIT_USER:$GIT_TOKEN@github.com/thangngh/jenkin-demo.git'
                 sh 'echo "do git clone"'
             }
         }
+
       }
 
     }
