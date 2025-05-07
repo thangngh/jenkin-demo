@@ -89,6 +89,10 @@ pipeline {
 
                     sshagent(credentials: ['df464007-da47-414c-907d-7c46364d9075']) {
                         script {
+
+                            sh 'git config --global user.email "thangngh@gmail.com"'
+                            sh 'git config --global user.name "thangngh"'
+
                             dir(repoDir) {
                                     sh "git pull --no-rebase ${repoUrl} ${mainBranch}"
                             }
