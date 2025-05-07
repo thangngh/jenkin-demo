@@ -81,10 +81,9 @@ pipeline {
 
       stage('SSH agent') {
         steps {
-            script {
-                sshagent(credentials:['df464007-da47-414c-907d-7c46364d9075']) {
-                    sh 'ssh -o StrictHostKeyChecking=no -l root 172.17.100.19 "echo Hello World"'
-                }
+            sshagent(credentials:['df464007-da47-414c-907d-7c46364d9075']) {
+                // sh 'ssh -o StrictHostKeyChecking=no -l root 172.17.100.19 "echo Hello World"'
+                sh 'echo "Hello World"'
             }
         }
       }
