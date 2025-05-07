@@ -10,7 +10,8 @@ pipeline {
     // Sử dụng cú pháp generic trigger để đơn giản hóa
     triggers {
         // Đặt lịch chạy mỗi giờ (thay vì mỗi phút như trước)
-        pollSCM('H */1 * * *')
+        // pollSCM('H */1 * * *')
+        githubPush()
     }
     
     parameters {
