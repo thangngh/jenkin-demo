@@ -115,24 +115,9 @@ pipeline {
                     def mainBranch = "main"
 
                     sshagent(credentials: ['df464007-da47-414c-907d-7c46364d9075']) {
-                        // sh """
-                        //     if [ -d "${repoDir}/.git" ]; then
-                        //         cd ${repoDir} && git pull origin ${mainBranch}
-                        //     else
-                        //         git clone ${repoUrl}
-
-                        //         echo 'Cloned repository successfully!'
-                        //     fi
-                        // """
                         script {
-                            if (fileExists("${repoDir}/.git")) {
-                                echo "Repository already exists. Pulling latest changes..."
-                                dir(repoDir) {
+                            dir(repoDir) {
                                     sh 'git pull origin ${mainBranch}'
-                                }
-                            } else {
-                                echo "Cloning repository..."
-                                sh "git clone ${repoUrl} ${repoDir}"
                             }
                         }
                     }
