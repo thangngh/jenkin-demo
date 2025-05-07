@@ -116,7 +116,7 @@ pipeline {
                             dir(repoDir) {
                                     sh "git fetch ${repoUrl} ${mainBranch}"
                                     sh "echo fetching... "
-                                    sh "git pull  ${repoUrl} ${mainBranch}"
+                                    sh "git pull  ${repoUrl}"
                             }
                         }
                     }
