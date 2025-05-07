@@ -90,7 +90,7 @@ pipeline {
                     sshagent(credentials: ['df464007-da47-414c-907d-7c46364d9075']) {
                         script {
                             dir(repoDir) {
-                                    sh "git pull ${repoUrl} ${mainBranch}"
+                                    sh "git pull --no-rebase ${repoUrl} ${mainBranch}"
                             }
                         }
                     }
