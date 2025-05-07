@@ -79,6 +79,16 @@ pipeline {
           }
         }
 
+      stage('SSH agent') {
+        steps {
+            script {
+                sshagent(['df464007-da47-414c-907d-7c46364d9075']) {
+                    sh 'ssh -o StrictHostKeyChecking=no root@172.17.100.19 "echo Hello World"'
+                }
+            }
+        }
+      }
+
     }
     
     post {
