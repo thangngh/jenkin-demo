@@ -90,7 +90,7 @@ pipeline {
                     def repoDir = "jenkin-demo"
                     def mainBranch = "main"
 
-                    sh 'echo "SSH agent is running... checking: 1"'
+                    sh 'echo "SSH agent is running... checking: 2"'
 
                     sshagent(credentials: ['df464007-da47-414c-907d-7c46364d9075']) {
                         script {
