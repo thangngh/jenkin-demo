@@ -79,6 +79,32 @@ pipeline {
           }
         }
 
+      stage('SSH agent') {
+        steps {
+            withCredentials([usernamePassword(credentialsId: 'GITHUB_CRED', usernameVariable: 'GIT_USER', passwordVariable: 'GIT_TOKEN')]) {
+                script {
+                    def repoUrl = "https://${GIT_USER}:${GIT_TOKEN}@github.com/thangngh/jenkin-demo.git"
+                    def repoDir = "jenkin-demo"
+                    def mainBranch = "main"
+
+                    sshagent(credentials: ['df464007-da47-414c-907d-7c46364d9075']) {
+                        script {
+
+                            sh 'git config --global user.email "thangngh@gmail.com"'
+                            sh 'git config --global user.name "thangngh"'
+
+                            dir(repoDir) {
+                                    sh "git pull --no-rebase ${repoUrl} ${mainBranch}"
+                            }
+                        }
+                    }
+                }
+            }
+
+        }
+
+      }
+
     }
     
     post {
