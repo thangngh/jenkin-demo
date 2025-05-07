@@ -88,21 +88,24 @@ pipeline {
             }
 
             withCredentials([usernamePassword(credentialsId: 'GITHUB_CRED', usernameVariable: 'GIT_USER', passwordVariable: 'GIT_TOKEN')]) {
-                // sh 'git clone https://$GIT_USER:$GIT_TOKEN@github.com/thangngh/jenkin-demo.git'
-                // sh 'echo "do git clone"'
-                def repoUrl = "https://${GIT_USER}:${GIT_TOKEN}@github.com/thangngh/jenkin-demo.git"
-                def REPO_DIR = "jenkin-demo"
-                def mainBranch = "main"
+                script {
 
-                if (fileExists("${REPO_DIR}/.git")) {
-                    echo "Repository already exists. Pulling latest changes..."
-                    dir(REPO_DIR) {
-                        sh 'git pull origin ${mainBranch}'
+                    // sh 'git clone https://$GIT_USER:$GIT_TOKEN@github.com/thangngh/jenkin-demo.git'
+                    // sh 'echo "do git clone"'
+                    def repoUrl = "https://${GIT_USER}:${GIT_TOKEN}@github.com/thangngh/jenkin-demo.git"
+                    def REPO_DIR = "jenkin-demo"
+                    def mainBranch = "main"
+
+                    if (fileExists("${REPO_DIR}/.git")) {
+                        echo "Repository already exists. Pulling latest changes..."
+                        dir(REPO_DIR) {
+                            sh 'git pull origin ${mainBranch}'
+                        }
+                    } else {
+                        echo "Cloning repository..."
+                        sh "git clone ${repoUrl}"
+
                     }
-                } else {
-                    echo "Cloning repository..."
-                    sh "git clone ${repoUrl}"
-
                 }
             }
         }
