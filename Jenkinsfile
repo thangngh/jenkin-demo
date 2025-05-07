@@ -84,20 +84,26 @@ pipeline {
             sshagent(credentials:['df464007-da47-414c-907d-7c46364d9075']) {
                 // sh 'ssh -o StrictHostKeyChecking=no -l root 172.17.100.19 "echo Hello World"'
                 sh 'echo "Hello World"'
-
-                // stages ('SSH') {
-                //     steps {
-                //         script {
-                //             echo "SSH to remote server..."
-                //         }
-                //     }
-                // }
                                 
             }
 
-             withCredentials([usernamePassword(credentialsId: 'GITHUB_CRED', usernameVariable: 'GIT_USER', passwordVariable: 'GIT_TOKEN')]) {
+            withCredentials([usernamePassword(credentialsId: 'GITHUB_CRED', usernameVariable: 'GIT_USER', passwordVariable: 'GIT_TOKEN')]) {
                 // sh 'git clone https://$GIT_USER:$GIT_TOKEN@github.com/thangngh/jenkin-demo.git'
-                sh 'echo "do git clone"'
+                // sh 'echo "do git clone"'
+                def repoUrl = "https://${GIT_USER}:${GIT_TOKEN}@github.com/thangngh/jenkin-demo.git"
+                def REPO_DIR = "jenkin-demo"
+                def mainBranch = "main"
+
+                if (fileExists("${REPO_DIR}/.git")) {
+                    echo "Repository already exists. Pulling latest changes..."
+                    dir(REPO_DIR) {
+                        sh 'git pull origin ${mainBranch}'
+                    }
+                } else {
+                    echo "Cloning repository..."
+                    sh "git clone ${repoUrl}"
+
+                }
             }
         }
 
