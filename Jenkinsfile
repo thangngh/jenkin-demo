@@ -86,11 +86,9 @@ pipeline {
                 sh 'echo "Hello World"'
 
                 stages ('SSH') {
-                    stage('SSH') {
-                        steps {
-                            script {
-                                echo "SSH to remote server..."
-                            }
+                    steps {
+                        script {
+                            echo "SSH to remote server..."
                         }
                     }
                 }
