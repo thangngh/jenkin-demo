@@ -80,12 +80,17 @@ pipeline {
         }
 
       stage('SSH agent') {
+        when {
+            branch 'main'
+        }
         steps {
             withCredentials([usernamePassword(credentialsId: 'GITHUB_CRED', usernameVariable: 'GIT_USER', passwordVariable: 'GIT_TOKEN')]) {
                 script {
                     def repoUrl = "https://${GIT_USER}:${GIT_TOKEN}@github.com/thangngh/jenkin-demo.git"
                     def repoDir = "jenkin-demo"
                     def mainBranch = "main"
+
+                    sh 'echo "SSH agent is running... checking: 1"'
 
                     sshagent(credentials: ['df464007-da47-414c-907d-7c46364d9075']) {
                         script {
