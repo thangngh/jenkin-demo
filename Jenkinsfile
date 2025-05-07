@@ -84,6 +84,7 @@ pipeline {
             sshagent(credentials:['df464007-da47-414c-907d-7c46364d9075']) {
                 // sh 'ssh -o StrictHostKeyChecking=no -l root 172.17.100.19 "echo Hello World"'
                 sh 'ls -la '
+                sh 'git pull origin main'
             }
 
             // withCredentials([usernamePassword(credentialsId: 'GITHUB_CRED', usernameVariable: 'GIT_USER', passwordVariable: 'GIT_TOKEN')]) {
