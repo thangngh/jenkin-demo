@@ -117,7 +117,7 @@ pipeline {
                     sshagent(credentials: ['df464007-da47-414c-907d-7c46364d9075']) {
                         script {
                             dir(repoDir) {
-                                    sh 'git pull origin ${mainBranch}'
+                                    sh "git pull origin ${mainBranch}"
                             }
                         }
                     }
