@@ -81,11 +81,13 @@ pipeline {
 
       stage('SSH agent') {
         steps {
-            // sshagent(credentials:['df464007-da47-414c-907d-7c46364d9075']) {
-            //     // sh 'ssh -o StrictHostKeyChecking=no -l root 172.17.100.19 "echo Hello World"'
-            //     sh 'echo "Hello World"'
-                                
-            // }
+            sshagent(credentials:['df464007-da47-414c-907d-7c46364d9075']) {
+                // sh 'ssh -o StrictHostKeyChecking=no -l root 172.17.100.19 "echo Hello World"'
+                sh 'echo "Hello World"'
+                def REPO_DIR = "jenkin-demo"
+                def mainBranch = "main"
+                sh 'cd ${REPO_DIR} && git pull origin ${mainBranch}'
+            }
 
             // withCredentials([usernamePassword(credentialsId: 'GITHUB_CRED', usernameVariable: 'GIT_USER', passwordVariable: 'GIT_TOKEN')]) {
             //     script {
@@ -108,21 +110,21 @@ pipeline {
             //         }
             //     }
             // }
-            withCredentials([usernamePassword(credentialsId: 'GITHUB_CRED', usernameVariable: 'GIT_USER', passwordVariable: 'GIT_TOKEN')]) {
-                script {
-                    def repoUrl = "https://${GIT_USER}:${GIT_TOKEN}@github.com/thangngh/jenkin-demo.git"
-                    def repoDir = "jenkin-demo"
-                    def mainBranch = "main"
+            // withCredentials([usernamePassword(credentialsId: 'GITHUB_CRED', usernameVariable: 'GIT_USER', passwordVariable: 'GIT_TOKEN')]) {
+            //     script {
+            //         def repoUrl = "https://${GIT_USER}:${GIT_TOKEN}@github.com/thangngh/jenkin-demo.git"
+            //         def repoDir = "jenkin-demo"
+            //         def mainBranch = "main"
 
-                    sshagent(credentials: ['df464007-da47-414c-907d-7c46364d9075']) {
-                        script {
-                            dir(repoDir) {
-                                    sh "git pull origin ${mainBranch}"
-                            }
-                        }
-                    }
-                }
-            }
+            //         sshagent(credentials: ['df464007-da47-414c-907d-7c46364d9075']) {
+            //             script {
+            //                 dir(repoDir) {
+            //                         sh "git pull origin ${mainBranch}"
+            //                 }
+            //             }
+            //         }
+            //     }
+            // }
 
         }
 
