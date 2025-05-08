@@ -115,12 +115,12 @@ pipeline {
                 // SSH vào VPS và đảm bảo workspace thật sự được cập nhật
                 sh """
                     ssh -o StrictHostKeyChecking=no root@192.168.20.250 \\
-                    "ls -la"
+                    "ls -la && \\
+                    cd jenkin-demo && \\
+                    git status && \\
+                    git branch && \\
+                    git pull origin"
                 """
-                sh 'cd jenkin-demo'
-                sh 'git status'
-                sh 'git branch'
-                sh 'git pull origin'
                     // ssh -o StrictHostKeyChecking=no root@192.168.20.250 \\
                     // "cd jenkin-demo && \\
                     // git pull origin"
