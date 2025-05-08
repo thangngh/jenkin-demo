@@ -82,47 +82,43 @@ pipeline {
             branch 'main'
         }
         steps {
-
-            checkout([
-                $class: 'GitSCM',
-                branches: [[name: '*/main']],
-                userRemoteConfigs: [[
-                    url: "https://github.com/thangngh/jenkin-demo.git",
-                    credentialsId: 'GITHUB_CRED'
-                ]],
-                extensions: [
-                    [$class: 'CleanBeforeCheckout']
-                ]
-            ])
             echo "SSH agent is running... checking: 1"
             
-            withCredentials([usernamePassword(credentialsId: 'GITHUB_CRED', usernameVariable: 'GIT_USER', passwordVariable: 'GIT_TOKEN')]) {
-                script {
-                    def repoUrl = "https://${GIT_USER}:${GIT_TOKEN}@github.com/thangngh/jenkin-demo.git"
-                    def repoDir = "jenkin-demo"
-                    def mainBranch = "main"
+            // withCredentials([usernamePassword(credentialsId: 'GITHUB_CRED', usernameVariable: 'GIT_USER', passwordVariable: 'GIT_TOKEN')]) {
+            //     script {
+            //         def repoUrl = "https://${GIT_USER}:${GIT_TOKEN}@github.com/thangngh/jenkin-demo.git"
+            //         def repoDir = "jenkin-demo"
+            //         def mainBranch = "main"
 
-                    sh 'echo "SSH agent is running... checking: 2"'
+            //         sh 'echo "SSH agent is running... checking: 2"'
 
-                    sh 'git config --global user.email "thangngh@gmail.com"'
-                    sh 'git config --global user.name "thangngh"'
+            //         sh 'git config --global user.email "thangngh@gmail.com"'
+            //         sh 'git config --global user.name "thangngh"'
 
-                    sshagent(credentials: ['df464007-da47-414c-907d-7c46364d9075']) {
-                        script {
-                            sh 'git branch'
-                            sh 'git status'
-                            sh 'git rev-parse --abbrev-ref HEAD'
+            //         sshagent(credentials: ['df464007-da47-414c-907d-7c46364d9075']) {
+            //             script {
+            //                 sh 'git branch'
+            //                 sh 'git status'
+            //                 sh 'git rev-parse --abbrev-ref HEAD'
 
-                            dir(repoDir) {
-                                    sh "git fetch ${repoUrl} ${mainBranch}"
-                                    sh "echo fetching... "
-                                    sh "git pull  ${repoUrl}"
-                            }
-                        }
-                    }
-                }
+            //                 dir(repoDir) {
+            //                         sh "git fetch ${repoUrl} ${mainBranch}"
+            //                         sh "echo fetching... "
+            //                         sh "git pull  ${repoUrl}"
+            //                 }
+            //             }
+            //         }
+            //     }
+            // }
+
+             sshagent(credentials: ['df464007-da47-414c-907d-7c46364d9075']) {
+                // SSH vào VPS và đảm bảo workspace thật sự được cập nhật
+                sh """
+                    ssh -o StrictHostKeyChecking=no ${root}@${192.168.20.250} \\
+                    "cd jenkin-demo && \\
+                    git pull origin"
+                """
             }
-
         }
 
       }
