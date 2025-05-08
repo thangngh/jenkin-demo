@@ -117,6 +117,10 @@ pipeline {
                     ssh -o StrictHostKeyChecking=no root@192.168.20.250 \\
                     "ls -la"
                 """
+                sh 'cd jenkin-demo'
+                sh 'git status'
+                sh 'git branch'
+                sh 'git pull origin'
                     // ssh -o StrictHostKeyChecking=no root@192.168.20.250 \\
                     // "cd jenkin-demo && \\
                     // git pull origin"
