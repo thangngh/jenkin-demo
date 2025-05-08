@@ -114,7 +114,8 @@ pipeline {
              sshagent(credentials: ['df464007-da47-414c-907d-7c46364d9075']) {
                 // SSH vào VPS và đảm bảo workspace thật sự được cập nhật
                 sh """
-                    ls -la
+                    ssh -o StrictHostKeyChecking=no root@192.168.20.250 \\
+                    "ls -la"
                 """
                     // ssh -o StrictHostKeyChecking=no root@192.168.20.250 \\
                     // "cd jenkin-demo && \\
