@@ -48,7 +48,7 @@ pipeline {
 
                       echo "Source Branch: ${env.CHANGE_BRANCH}"
                       echo "Target Branch: ${env.CHANGE_TARGET}"
-                      echo "Pull Request ID: ${env.CHANGE_ID}"
+                      echo "Pull Request ID: ${env}"
                       // Fetch target branch để kiểm tra conflicts
                       sh "git fetch https://${GIT_USER}:${GIT_TOKEN}@github.com/thangngh/jenkin-demo.git ${targetBranch}:${targetBranch}"
 
