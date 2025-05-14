@@ -16,6 +16,7 @@ pipeline {
                 [key: 'CHANGE_URL', value: '$.pull_request.html_url'],
                 [key: 'CHANGE_BRANCH', value: '$.pull_request.head.ref'],
                 [key: 'CHANGE_TARGET', value: '$.pull_request.base.ref']
+                [key: 'ROOT_REPO', value: '&.pull_request']
             ],
             causeString: 'Triggered on $ref',
             token: '123',
@@ -43,6 +44,7 @@ pipeline {
                     env.GITHUB_REPO = env.CHANGE_URL ? env.CHANGE_URL.split('/')[4] + '/' + env.CHANGE_URL.split('/')[5].replace('.git', '') : 'thangngh/jenkin-demo'
                     env.PR_NUMBER = env.CHANGE_ID ?: params.PR_NUMBER
                     
+                    echo "ROOT_REPO: $ROOT_REPO"
                     echo "Working with repository: $CHANGE_BRANCH"
                     echo "Pull Request Number: $CHANGE_TARGET"
                     
