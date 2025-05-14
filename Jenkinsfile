@@ -44,7 +44,7 @@ pipeline {
                     env.PR_NUMBER = env.CHANGE_ID ?: params.PR_NUMBER
                     
                     echo "Working with repository: $CHANGE_BRANCH"
-                    echo "Pull Request Number: ${env.PR_NUMBER}"
+                    echo "Pull Request Number: $CHANGE_TARGET"
                     
                     checkout scm
                 }
