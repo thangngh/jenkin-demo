@@ -36,6 +36,18 @@ pipeline {
                 }
             }
         }
+
+        stage('Build from PR') {
+            when {
+                expression {
+                    return params.PR_ACTION == 'opened'
+                }
+            }
+            steps {
+                echo "New Pull Request #${CHANGE_ID} from branch ${CHANGE_BRANCH} to ${CHANGE_TARGET}"
+                echo "Triggered by action: ${PR_ACTION}"
+            }
+        }
         
         stage('Checkout') {
             steps {
