@@ -54,7 +54,7 @@ pipeline {
         stage('Check Conflicts') {
           steps {
               script {
-                  def targetBranch = env.CHANGE_TARGET ?: "main"
+                  def targetBranch = env.CHANGE_TARGET ?: "main" 
                   if (PR_ACTION == 'opened' || PR_ACTION == 'synchronize') {
                       echo "Pull request action: $PR_ACTION"
                   } else {
