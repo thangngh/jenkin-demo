@@ -22,7 +22,7 @@ pipeline {
     }
     
     stages {
-        stage('Start') {
+        stage('Start') { 
             steps {
                 script {
                     updateGitHubCommitStatus('PENDING', 'Jenkins is validating the pull request...')
