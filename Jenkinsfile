@@ -15,6 +15,7 @@ pipeline {
                 [key: 'CHANGE_URL', value: '$.pull_request.html_url'],
                 [key: 'CHANGE_BRANCH', value: '$.pull_request.head.ref'],
                 [key: 'CHANGE_TARGET', value: '$.pull_request.base.ref'],
+                [key: 'PR_ACTION', value: '$.action']
             ],
             causeString: 'Triggered on $ref',
             token: '123',
@@ -54,7 +55,12 @@ pipeline {
           steps {
               script {
                   def targetBranch = env.CHANGE_TARGET ?: "main"
-
+                  if (PR_ACTION == 'opened' || PR_ACTION == 'synchronize') {
+                      echo "Pull request action: $PR_ACTION"
+                  } else {
+                      echo "Pull request action: $PR_ACTION"
+                      error "Invalid pull request action. Only 'opened' and 'synchronize' are allowed."
+                  }
                   withCredentials([usernamePassword(credentialsId: 'GITHUB_CRED', usernameVariable: 'GIT_USER', passwordVariable: 'GIT_TOKEN')]) {
 
                       echo "Source branch: $CHANGE_BRANCH"
