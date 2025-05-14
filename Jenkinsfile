@@ -6,6 +6,11 @@ pipeline {
         timeout(time: 60, unit: 'MINUTES')
         disableConcurrentBuilds()
     }
+
+    environment {
+        SOURCE_BRANCH = "${env.CHANGE_BRANCH}"
+        TARGET_BRANCH = "${env.CHANGE_TARGET}"
+    }
     
     triggers {
         // pollSCM('H */1 * * *')
