@@ -10,6 +10,18 @@ pipeline {
     triggers {
         // pollSCM('H */1 * * *')
         githubPush()
+        GenericTrigger(
+            genericVariables: [
+                [key: 'CHANGE_ID', value: '$.pull_request.number'],
+                [key: 'CHANGE_URL', value: '$.pull_request.html_url'],
+                [key: 'CHANGE_BRANCH', value: '$.pull_request.head.ref'],
+                [key: 'CHANGE_TARGET', value: '$.pull_request.base.ref']
+            ],
+            causeString: 'Triggered on $ref',
+            token: '123',
+            printContributedVariables: false,
+            printPostContent: false
+        )
     }
     
     parameters {
