@@ -43,7 +43,7 @@ pipeline {
                     env.GITHUB_REPO = env.CHANGE_URL ? env.CHANGE_URL.split('/')[4] + '/' + env.CHANGE_URL.split('/')[5].replace('.git', '') : 'thangngh/jenkin-demo'
                     env.PR_NUMBER = env.CHANGE_ID ?: params.PR_NUMBER
                     
-                    echo "Working with repository: ${env.GITHUB_REPO}"
+                    echo "Working with repository: $CHANGE_BRANCH"
                     echo "Pull Request Number: ${env.PR_NUMBER}"
                     
                     checkout scm
