@@ -10,6 +10,19 @@ pipeline {
     triggers {
         // pollSCM('H */1 * * *')
         githubPush()
+        GenericTrigger(
+            genericVariables: [
+                [key: 'CHANGE_ID', value: '$.pull_request.number'],
+                [key: 'CHANGE_URL', value: '$.pull_request.html_url'],
+                [key: 'CHANGE_BRANCH', value: '$.pull_request.head.ref'],
+                [key: 'CHANGE_TARGET', value: '$.pull_request.base.ref']
+                [key: 'ROOT_REPO', value: '&.pull_request']
+            ],
+            causeString: 'Triggered on $ref',
+            token: '123',
+            printContributedVariables: false,
+            printPostContent: false
+        )
     }
     
     parameters {
@@ -31,8 +44,9 @@ pipeline {
                     env.GITHUB_REPO = env.CHANGE_URL ? env.CHANGE_URL.split('/')[4] + '/' + env.CHANGE_URL.split('/')[5].replace('.git', '') : 'thangngh/jenkin-demo'
                     env.PR_NUMBER = env.CHANGE_ID ?: params.PR_NUMBER
                     
-                    echo "Working with repository: ${env.GITHUB_REPO}"
-                    echo "Pull Request Number: ${env.PR_NUMBER}"
+                    echo "ROOT_REPO: $ROOT_REPO"
+                    echo "Working with repository: $CHANGE_BRANCH"
+                    echo "Pull Request Number: $CHANGE_TARGET"
                     
                     checkout scm
                 }
@@ -48,7 +62,7 @@ pipeline {
 
                       echo "Source Branch: ${env.CHANGE_BRANCH}"
                       echo "Target Branch: ${env.CHANGE_TARGET}"
-                      echo "Pull Request ID: ${env.CHANGE_ID}"
+                      echo "Pull Request ID: ${env}"
                       // Fetch target branch để kiểm tra conflicts
                       sh "git fetch https://${GIT_USER}:${GIT_TOKEN}@github.com/thangngh/jenkin-demo.git ${targetBranch}:${targetBranch}"
 
