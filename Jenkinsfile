@@ -7,14 +7,27 @@ pipeline {
         disableConcurrentBuilds()
     }
 
-    environment {
-        SOURCE_BRANCH = "${env.CHANGE_BRANCH}"
-        TARGET_BRANCH = "${env.CHANGE_TARGET}"
-    }
+    // environment {
+    //     SOURCE_BRANCH = "${env.CHANGE_BRANCH}"
+    //     TARGET_BRANCH = "${env.CHANGE_TARGET}"
+    // }
     
     triggers {
         // pollSCM('H */1 * * *')
-        githubPush()
+        // githubPush()
+        GenericTrigger(
+            genericVariables: [
+                [key: 'CHANGE_ID', value: '$.pull_request.number'],
+                [key: 'CHANGE_URL', value: '$.pull_request.html_url'],
+                [key: 'CHANGE_BRANCH', value: '$.pull_request.head.ref'],
+                [key: 'CHANGE_TARGET', value: '$.pull_request.base.ref'],
+                [key: 'PR_ACTION', value: '$.action']
+            ],
+            causeString: 'Triggered on $ref',
+            token: '123',
+            printContributedVariables: false,
+            printPostContent: false
+        )
     }
     
     parameters {
@@ -27,6 +40,20 @@ pipeline {
                 script {
                     updateGitHubCommitStatus('PENDING', 'Jenkins is validating the pull request...')
                 }
+            }
+        }
+
+        stage('Build from PR') {
+            when {
+                expression {
+                    return params.PR_ACTION == 'opened'
+                }
+            }
+            steps {
+                echo "New Pull Request #${CHANGE_ID} from branch ${CHANGE_BRANCH} to ${CHANGE_TARGET}"
+                echo "Triggered by action: ${PR_ACTION}"
+                echo "Source branch: $CHANGE_BRANCH"
+                echo "Target branch: $CHANGE_TARGET"
             }
         }
         
