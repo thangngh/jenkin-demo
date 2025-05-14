@@ -51,7 +51,7 @@ pipeline {
             }
             steps {
                 echo "New Pull Request #${CHANGE_ID} from branch ${CHANGE_BRANCH} to ${CHANGE_TARGET}"
-                echo "Triggered by action: ${PR_ACTION}"
+                echo "Triggered by action: ${PR_ACTION}" 
                 echo "Source branch: $CHANGE_BRANCH"
                 echo "Target branch: $CHANGE_TARGET"
             }
