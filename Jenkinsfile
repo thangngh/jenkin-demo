@@ -8,20 +8,8 @@ pipeline {
     }
     
     triggers {
+        // pollSCM('H */1 * * *')
         githubPush()
-        GenericTrigger(
-            genericVariables: [
-                [key: 'CHANGE_ID', value: '$.pull_request.number'],
-                [key: 'CHANGE_URL', value: '$.pull_request.html_url'],
-                [key: 'CHANGE_BRANCH', value: '$.pull_request.head.ref'],
-                [key: 'CHANGE_TARGET', value: '$.pull_request.base.ref'],
-                [key: 'PR_ACTION', value: '$.action']
-            ],
-            causeString: 'Triggered on $ref',
-            token: '123',
-            printContributedVariables: false,
-            printPostContent: false
-        )
     }
     
     parameters {
@@ -36,18 +24,6 @@ pipeline {
                 }
             }
         }
-
-        stage('Build from PR') {
-            when {
-                expression {
-                    return params.PR_ACTION == 'opened'
-                }
-            }
-            steps {
-                echo "New Pull Request #${CHANGE_ID} from branch ${CHANGE_BRANCH} to ${CHANGE_TARGET}"
-                echo "Triggered by action: ${PR_ACTION}"
-            }
-        }
         
         stage('Checkout') {
             steps {
@@ -55,8 +31,8 @@ pipeline {
                     env.GITHUB_REPO = env.CHANGE_URL ? env.CHANGE_URL.split('/')[4] + '/' + env.CHANGE_URL.split('/')[5].replace('.git', '') : 'thangngh/jenkin-demo'
                     env.PR_NUMBER = env.CHANGE_ID ?: params.PR_NUMBER
                     
-                    echo "Working with repository: $CHANGE_BRANCH"
-                    echo "Pull Request Number: $CHANGE_TARGET"
+                    echo "Working with repository: ${env.GITHUB_REPO}"
+                    echo "Pull Request Number: ${env.PR_NUMBER}"
                     
                     checkout scm
                 }
@@ -66,17 +42,9 @@ pipeline {
         stage('Check Conflicts') {
           steps {
               script {
-                  def targetBranch = env.CHANGE_TARGET ?: "main" 
-                  if (PR_ACTION == 'opened' || PR_ACTION == 'synchronize') {
-                      echo "Pull request action: $PR_ACTION"
-                  } else {
-                      echo "Pull request action: $PR_ACTION"
-                      error "Invalid pull request action. Only 'opened' and 'synchronize' are allowed."
-                  }
-                  withCredentials([usernamePassword(credentialsId: 'GITHUB_CRED', usernameVariable: 'GIT_USER', passwordVariable: 'GIT_TOKEN')]) {
+                  def targetBranch = env.CHANGE_TARGET ?: "main"
 
-                      echo "Source branch: $CHANGE_BRANCH"
-                      echo "Target branch: $CHANGE_TARGET"
+                  withCredentials([usernamePassword(credentialsId: 'GITHUB_CRED', usernameVariable: 'GIT_USER', passwordVariable: 'GIT_TOKEN')]) {
                       // Fetch target branch để kiểm tra conflicts
                       sh "git fetch https://${GIT_USER}:${GIT_TOKEN}@github.com/thangngh/jenkin-demo.git ${targetBranch}:${targetBranch}"
 
