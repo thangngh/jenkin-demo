@@ -16,7 +16,7 @@ pipeline {
                 [key: 'CHANGE_URL', value: '$.pull_request.html_url'],
                 [key: 'CHANGE_BRANCH', value: '$.pull_request.head.ref'],
                 [key: 'CHANGE_TARGET', value: '$.pull_request.base.ref'],
-                [key: 'ROOT_REPO', value: '&.pull_request']
+                [key: 'ROOT_REPO', value: '$.pull_request']
             ],
             causeString: 'Triggered on $ref',
             token: '123',
